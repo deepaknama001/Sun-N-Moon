@@ -1,0 +1,12 @@
+{
+  "name": "Sun & Moon Logic Puzzle",
+  "short_name": "Sun & Moon",
+  "description": "A polished Sun & Moon logic puzzle with saved progress and infinite levels.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5efe6",
+  "theme_color": "#f5efe6",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

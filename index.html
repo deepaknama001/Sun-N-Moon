@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f5efe6" />
+  <meta name="description" content="A polished Sun & Moon logic puzzle inspired by classic binary puzzles." />
+  <title>Sun & Moon — Logic Puzzle</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <main class="app-shell" id="app">
+    <header class="topbar">
+      <button class="icon-btn" id="levelsBtn" type="button" aria-label="Choose level" title="Levels">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+      </button>
+
+      <div class="brand" aria-label="Sun and Moon puzzle">
+        <div class="brand-mark" aria-hidden="true"><span class="mini-sun"></span><span class="mini-moon"></span></div>
+        <div class="brand-copy"><strong>SUN &amp; MOON</strong><span>logic puzzle</span></div>
+      </div>
+
+      <button class="icon-btn" id="settingsBtn" type="button" aria-label="Open settings" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.4a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8Z"/><path d="M19.2 13.2c.05-.4.08-.8.08-1.2s-.03-.8-.08-1.2l2.03-1.58-1.9-3.29-2.5 1a8.7 8.7 0 0 0-2.08-1.2L14.37 3h-3.8l-.38 2.73c-.74.3-1.44.7-2.07 1.2l-2.5-1-1.9 3.29 2.02 1.58c-.05.4-.08.8-.08 1.2s.03.8.08 1.2l-2.03 1.58 1.9 3.29 2.51-1a8.7 8.7 0 0 0 2.07 1.2l.38 2.73h3.8l.38-2.73c.74-.3 1.44-.7 2.08-1.2l2.5 1 1.9-3.29-2.03-1.58Z"/></svg>
+      </button>
+    </header>
+
+    <section class="game-card" aria-live="polite">
+      <div class="game-head">
+        <div>
+          <div class="eyebrow">LEVEL <span id="levelNumber">1</span></div>
+          <h1 id="difficultyLabel">Warm-up</h1>
+        </div>
+        <div class="head-stats">
+          <div class="stat-pill"><span class="stat-icon">⏱</span><span id="timer">00:00</span></div>
+          <div class="stat-pill"><span class="stat-icon">🔥</span><span id="streak">0</span></div>
+        </div>
+      </div>
+
+      <div class="progress-wrap" aria-hidden="true"><div class="progress-bar" id="levelProgress"></div></div>
+
+      <div class="board-wrap">
+        <div id="board" class="board" role="grid" aria-label="Sun and Moon puzzle board"></div>
+      </div>
+
+      <div class="rule-strip" id="ruleStrip">
+        <button class="rule-chip active" type="button" data-rule="balance"><span class="chip-icons"><span class="tiny sun"></span><span class="tiny moon"></span></span><span>Equal each row &amp; column</span></button>
+        <button class="rule-chip" type="button" data-rule="triple"><span class="triple-demo">● ● <b>×</b></span><span>No three alike</span></button>
+        <button class="rule-chip" type="button" data-rule="links"><span class="link-demo">= / ×</span><span>Follow links</span></button>
+      </div>
+
+      <div class="message" id="message" role="status">Tap a square to place a sun.</div>
+
+      <div class="controls" aria-label="Game controls">
+        <button class="control-btn" id="undoBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7 4 12l5 5"/><path d="M5 12h8a6 6 0 1 1 0 12" transform="translate(0 -6)"/></svg><span>Undo</span></button>
+        <button class="control-btn primary" id="hintBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M8.4 14.5A6 6 0 1 1 15.6 14.5c-1 .7-1.6 1.6-1.6 2.5h-4c0-.9-.6-1.8-1.6-2.5Z"/></svg><span>Hint</span><small id="hintCount">3</small></button>
+        <button class="control-btn" id="restartBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6v5h-5"/><path d="M19 10a8 8 0 1 0 1 6"/></svg><span>Restart</span></button>
+      </div>
+    </section>
+
+    <footer class="footer-note">Progress saves automatically on this device.</footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-backdrop" id="levelsModal" hidden>
+    <section class="modal level-modal" role="dialog" aria-modal="true" aria-labelledby="levelsTitle">
+      <div class="modal-head"><div><span class="eyebrow">YOUR JOURNEY</span><h2 id="levelsTitle">Levels</h2></div><button class="close-btn" data-close="levelsModal" aria-label="Close">×</button></div>
+      <div class="summary-grid">
+        <div><strong id="solvedCount">0</strong><span>Solved</span></div>
+        <div><strong id="bestStreak">0</strong><span>Best streak</span></div>
+        <div><strong id="totalTime">0m</strong><span>Play time</span></div>
+      </div>
+      <div class="level-grid" id="levelGrid"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="settingsModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-head"><div><span class="eyebrow">PREFERENCES</span><h2 id="settingsTitle">Settings</h2></div><button class="close-btn" data-close="settingsModal" aria-label="Close">×</button></div>
+      <div class="settings-list">
+        <label class="setting-row"><span><strong>Sound</strong><small>Soft feedback sounds</small></span><input id="soundToggle" type="checkbox" checked /><i></i></label>
+        <label class="setting-row"><span><strong>Haptics</strong><small>Vibration on supported phones</small></span><input id="hapticsToggle" type="checkbox" checked /><i></i></label>
+        <label class="setting-row"><span><strong>Auto-check</strong><small>Highlight broken rules instantly</small></span><input id="autoCheckToggle" type="checkbox" checked /><i></i></label>
+        <label class="setting-row"><span><strong>High contrast</strong><small>Stronger board outlines</small></span><input id="contrastToggle" type="checkbox" /><i></i></label>
+      </div>
+      <button class="danger-btn" id="resetProgressBtn" type="button">Reset all progress</button>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="confirmModal" hidden>
+    <section class="modal confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="confirm-icon">↻</div>
+      <h2 id="confirmTitle">Restart this level?</h2>
+      <p>Your current moves on this level will be cleared.</p>
+      <div class="confirm-actions"><button class="secondary-btn" id="cancelRestart">Keep playing</button><button class="primary-btn-solid" id="confirmRestart">Restart</button></div>
+    </section>
+  </div>
+
+  <div class="completion" id="completion" hidden>
+    <div class="completion-rays"></div>
+    <div class="completion-card">
+      <div class="victory-orbit" aria-hidden="true"><div class="victory-sun"></div><div class="victory-moon"></div></div>
+      <span class="eyebrow">BEAUTIFULLY DONE</span>
+      <h2>Level complete</h2>
+      <p><strong id="completeTime">00:00</strong> · <span id="completeMoves">0 moves</span></p>
+      <div class="next-meter"><div id="nextMeter"></div></div>
+      <small>Next level loading…</small>
+      <button id="nextNowBtn" type="button">Next level now</button>
+    </div>
+  </div>
+
+  <template id="sunIcon"><svg class="piece-svg sun-svg" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="13"/><g><path d="M32 5v8M32 51v8M5 32h8M51 32h8M13 13l6 6M45 45l6 6M51 13l-6 6M19 45l-6 6"/></g></svg></template>
+  <template id="moonIcon"><svg class="piece-svg moon-svg" viewBox="0 0 64 64" aria-hidden="true"><path d="M45.8 43.8A22 22 0 1 1 29.4 10.5 18 18 0 0 0 45.8 43.8Z"/></svg></template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
